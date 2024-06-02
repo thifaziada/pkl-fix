@@ -29,6 +29,10 @@
   <!-- Include Flowbite JS -->
   <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
 
+  <!-- Include SweetAlert CSS and JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -163,7 +167,7 @@
                     {{ $testimony->content }}
                     <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                   </p>
-                  <img src="{{asset('/storage/photos/'.$testimony->alumni->photo)}}" class="testimonial-img" alt="{{ $testimony->alumni->first_name }}">
+                  <img src="{{ asset('/storage/photos/'.$testimony->alumni->photo)}}" class="testimonial-img" alt="{{ $testimony->alumni->first_name }}">
                   <h3>{{ $testimony->alumni->first_name }} {{ $testimony->alumni->last_name }}</h3>
                   <h4>{{ $testimony->alumni->current_job }}</h4>
                 </div>
@@ -204,70 +208,35 @@
             </ul>
           </div>
 
-<!-- Section Question (sebelah kanan FAQ) -->
-<div class="col-lg-4" data-aos="fade-left">
-  <form id="questionForm" action="/submit-question" method="post" role="form">
-    @csrf
-    <!-- Additional Question Card -->
-    <div class="bg-white shadow-md rounded-lg mt-3 p-6">
-      <h5 class="text-xl font-semibold mb-2">Additional Question</h5>
-      <p class="text-gray-700 mb-4">What additional information or questions do you have for us?</p>
-      <textarea class="form-control block w-full px-3 py-2 text-base text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" name="additionalQuestion" rows="4" placeholder="Type your question here..." required></textarea>
-    </div>
-    <!-- End Additional Question Card -->
-
-    <!-- Google reCAPTCHA widget -->
-    <div class="mt-4 mb-4">
-      <label for="captcha" class="form-label text-gray-700">Captcha</label>
-      <div class="flex items-center mt-2">
-        <span>{!! captcha_img() !!}</span>
-        <button type="button" class="btn bg-red-500 text-white ml-2 reload p-2 rounded-lg" id="reload">
-          &#x21bb;
-        </button>
-      </div>
-      <input type="text" class="block w-full px-3 py-2 mt-2 text-base text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter Captcha" name="captcha" required>
-    </div>
-
-    <div class="text-center mt-6">
-      <button type="submit" class="btn text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mx-auto">Submit</button>
-    </div>
-  </form>
-</div>
-<!-- End Section Question -->
-
-<!-- Success Alert Modal -->
-<div id="successModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
-  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-      <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-    </div>
-
-    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-    <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-      <div>
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-          <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
+    <!-- Section Question (sebelah kanan FAQ) -->
+    <div class="col-lg-4" data-aos="fade-left">
+      <form id="questionForm" action="/submit-question" method="post" role="form">
+        @csrf
+        <!-- Additional Question Card -->
+        <div class="bg-white shadow-md rounded-lg mt-3 p-6">
+          <h5 class="text-xl font-semibold mb-2">Additional Question</h5>
+          <p class="text-gray-700 mb-4">What additional information or questions do you have for us?</p>
+          <textarea class="form-control block w-full px-3 py-2 text-base text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" name="additionalQuestion" rows="4" placeholder="Type your question here..." required></textarea>
         </div>
-        <div class="mt-3 text-center sm:mt-5">
-          <h3 class="text-lg leading-6 font-medium text-gray-900">Submission Successful</h3>
-          <div class="mt-2">
-            <p class="text-sm text-gray-500">Your question has been submitted successfully.</p>
+        <!-- End Additional Question Card -->
+
+        <!-- Google reCAPTCHA widget -->
+        <div class="mt-4 mb-4">
+          <div class="flex items-center mt-2">
+            <span>{!! captcha_img() !!}</span>
+            <button type="button" class="btn bg-red-500 text-white ml-2 reload p-2 rounded-lg" id="reload">
+              &#x21bb;
+            </button>
           </div>
+          <input type="text" class="block w-full px-3 py-2 mt-2 text-base text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter Captcha" name="captcha" required>
         </div>
-      </div>
-      <div class="mt-5 sm:mt-6">
-        <button type="button" class="btn text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mx-auto" onclick="closeModal()">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
 
+        <div class="text-center mt-6">
+          <button type="submit" class="btn text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mx-auto">Submit</button>
         </div>
-      </div>
-    </section><!-- End Frequently Asked Questions Section -->
+      </form>
+    </div>
+    <!-- End Section Question -->
     
     <!-- ======= Footer ======= -->
     <footer id="footer">
@@ -313,37 +282,35 @@
               }
           });
       });
-  document.getElementById('questionForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-      method: form.method,
-      body: formData,
-      headers: {
-        'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value
-      }
-    })
-    .then(response => {
-      if (response.ok) {
-        document.getElementById('successModal').classList.remove('hidden');
-      } else {
-        // Handle error response
-        alert('There was an error submitting your question.');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('There was an error submitting your question.');
-    });
-  });
-
-  function closeModal() {
-    document.getElementById('successModal').classList.add('hidden');
-  }
-
+      $(document).ready(function() {
+        $('#questionForm').on('submit', function(event) {
+          event.preventDefault();
+          $.ajax({
+            url: $(this).attr('action'),
+            method: $(this).attr('method'),
+            data: $(this).serialize(),
+            success: function(response) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Submission Successful',
+                text: 'Your question has been submitted successfully.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#38a169'
+              });
+            },
+            error: function(xhr) {
+              // Handle error
+              Swal.fire({
+                icon: 'error',
+                title: 'Submission Failed',
+                text: 'There was an error submitting your question. Please try again.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#e53e3e'
+              });
+            }
+          });
+        });
+      });
     </script>
 
   </main>

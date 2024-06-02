@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-4 mx-auto">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Admin Management of Alumni Accounts</h2>
+        <h2 class="text-3xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Admin Management of Alumni Accounts</h2>
         <div class="mb-6">
             <div class="flex flex-wrap gap-4 mb-6">
                 <div class="w-full md:w-1/2 lg:w-1/4">

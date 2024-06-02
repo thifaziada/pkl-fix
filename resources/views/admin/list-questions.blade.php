@@ -3,7 +3,9 @@
 @section('content')
 <div class="container mx-auto py-5">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">Admin Management FAQ</h2>
+        <div class="flex justify-between items-center pb-5 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-gray-100">Admin Management FAQ</h2>
+        </div>
         <div class="overflow-x-auto relative">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
