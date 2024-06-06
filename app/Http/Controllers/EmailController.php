@@ -3,49 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ReferralEmail;
-use App\Models\Announcement;
-use App\Models\User;
-use App\Notifications\SendEmailReferral;
+use App\Models\Referral;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
-    // public function sendRewardReferral()
-    // {
-    //     $user=User::all();
+    public function sendReferralEmail($referralId)
+    {
+        $referral = Referral::findOrFail($referralId);
+        $referringUser = $referral->user;
+        $toEmail = $referringUser->email;
+        $message = 'Congratulations! Your referral has been accepted. You get rewards via ShopeePay. Please reply to this message by entering your phone number to claim your prize.';
+        $subject = 'Referral Accepted';
 
-    //     $details=[
-    //         'greeting'=>'Congrats',
-    //         'body'=>'You get reward',
-    //         'actiontext'=>'subscribe',
-    //         'actionurl'=>'/',
-    //         'lastline'=>'lastline',
-    //     ];
+        Mail::to($toEmail)->send(new ReferralEmail($message, $subject));
 
-    //     // Notification::send($user, new SendEmailReferral($details));
+        $referral->save();
 
-    //     dd('done');
-    // }
-
-    // public function store(Request $request) {
-    //     $announcement = Announcement::create([
-    //         'title' => $request->title,
-    //         'description' => $request->description
-    //     ]);
-
-    //     return response()->json($announcement);
-    // }
-
-    public function sendReferralEmail(){
-        $toEmail = 'thifazia13@gmail.com';
-        $message = 'Congratulations!';
-        $subject = 'Referral Email';
-
-        $response = Mail::to($toEmail)->send(new ReferralEmail($message, $subject));
-
-        dd($response);
+        return redirect()->back()->with('success', 'Email sent successfully!');
     }
-
 }
