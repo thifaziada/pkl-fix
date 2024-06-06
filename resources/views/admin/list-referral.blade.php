@@ -58,6 +58,16 @@
                                 </svg>
                             </button>
                         </form>
+                        @if($referral->status === 'Accepted' && !$referral->email_sent)
+                        <form action="{{ route('send.referral.email', $referral->id) }}" method="POST" class="flex items-center space-x-2 send-email-form">
+                            @csrf
+                            <button type="button" class="flex items-center justify-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 send-email-btn">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </button>
+                        </form>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -83,6 +93,27 @@
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, update it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.send-email-btn').forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                let form = button.closest('form');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to send an email to the referring user.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, send it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
