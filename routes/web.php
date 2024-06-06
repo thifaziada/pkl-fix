@@ -5,9 +5,11 @@ use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CaptchaController;
+use App\Http\Controllers\EmailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,6 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/alumni/search', [AlumniController::class, 'search'])->name('alumni.search');
     Route::get('/alumni/{id}', [AlumniController::class, 'viewAlumniDetails'])->name('alumni.view');
 
+    //test
+    Route::get('/alumni2', [AlumniController::class, 'list2'])->name('alumni.list2');
+
+
     Route::get('/stories', [StoryController::class, 'index'])->name('alumni.stories');
     Route::post('/stories', [StoryController::class, 'createStories'])->name('stories.create');
     Route::delete('/stories/delete/{story_id}', [StoryController::class, 'destroy'])->name('story.delete');
@@ -69,6 +75,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/stories/{story_id}/comments', [StoryController::class, 'storeComment'])->name('comments.store');
     Route::delete('/stories/{story_id}/comments/{comment_id}', [StoryController::class, 'deleteComment'])->name('comment.delete');
 
+    Route::get('/referral', [ReferralController::class, 'create'])->name('referral.create');
+    Route::post('/referral', [ReferralController::class, 'storeReferral'])->name('referral.store');
 });
 
 // Admin
@@ -87,10 +95,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/alumni/{id}', [AdminController::class, 'destroy'])->name('admin.alumni.destroy');
     Route::get('/referrals', [AdminController::class, 'index'])->name('admin.list-referral');
     Route::post('/referrals/{id}/update-status', [AdminController::class, 'updateStatus'])->name('referrals.updateStatus');
+    Route::get('/send', [AdminController::class, 'sendRewardReferral'])->name('referrals.sendEmail');
 });
+
+Route::post('announcement', [EmailController::class, 'store']);
+
 
 
 
 
 
 require __DIR__.'/auth.php';
+
+Route::get('send-mail', [EmailController::class, 'sendReferralEmail']);

@@ -7,9 +7,14 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Alumni;
 use App\Models\Faq;
 use App\Models\Referral;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+// use Illuminate\Notifications\Notification;
+use App\Notifications\SendEmailReferral;
+
+use Illuminate\Support\Facades\Notification;
 
 class AdminController extends Controller
 {

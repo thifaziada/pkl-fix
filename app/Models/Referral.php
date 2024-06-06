@@ -9,7 +9,12 @@ class Referral extends Model
 {
     use HasFactory;
 
+    protected $table = 'referrals';
+
+    protected $primaryKey = 'id';
+
     protected $fillable = [
+        'id',
         'user_id',
         'first_name',
         'last_name',
@@ -18,5 +23,10 @@ class Referral extends Model
         'cv',
         'status',
     ];
+
+    public function alumni()
+    {
+        return $this->belongsTo(Alumni::class, 'user_id');
+    }
 }
 

@@ -48,8 +48,9 @@
                         <form action="{{ route('referrals.updateStatus', $referral->id) }}" method="POST" class="flex items-center space-x-2 update-status-form">
                             @csrf
                             <select name="status" class="border border-gray-300 rounded p-2 bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
-                                <option value="Accepted" {{ $referral->status == 'Accepted' ? 'selected' : '' }}>Accepted</option>
-                                <option value="Rejected" {{ $referral->status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                                <option selected>select</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Rejected">Rejected</option>
                             </select>
                             <button type="button" class="flex items-center justify-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 submit-btn">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

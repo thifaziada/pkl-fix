@@ -33,16 +33,6 @@ class StoryController extends Controller
         return redirect()->route('alumni.stories')->with('success', 'story uploaded!');
     }
 
-    // public function showComments($story_id)
-    // {
-    //     $story = Story::join('alumnis', 'alumnis.id', '=', 'stories.user_id')
-    //             ->with('comments')
-    //             ->find($story_id);
-
-    //      return view('alumni.stories.comments', compact('story', 'comments'));
-
-    // }
-
     public function showComments($storyId)
     {
         $story = Story::findOrFail($storyId);
@@ -71,64 +61,13 @@ class StoryController extends Controller
 
         return redirect()->back()->with('success', 'Success delete story!');
     }
-    public function deleteComment($comment_id)
+    public function deleteComment($story_id, $comment_id)
     {
         $comment = Comment::findOrFail($comment_id);
         $comment->delete();
 
         return redirect()->back()->with('success', 'Success delete comment!');
     }
-    // public function reply(Request $request)
-    // {
 
-        // $request->validate([
-        //     'comment'=>'required',
-        // ]);
-   
-        // $input = $request->all();
-        // $input['user_id'] = auth()->user()->id;
-    
-        // Comment::create($input);
-   
-        // return back();
-
-    //     $user = Auth::user();
-    //     $story = Story::where('story_id', $request->story_id);
-
-
-    //     Comment::create([
-    //         'story_id' => $story->story_id,
-    //         'user_id'=> $user->id,
-    //         'comment'=> $request->comment,
-    //     ]);
-
-    //     return redirect()->back()->with('success', 'Comment added successfully');
-        
-    // }
-
-    // /**
-    //  * destroy
-    //  *
-    //  * @param  mixed $post
-    //  * @return void
-    //  */
-    // public function destroy(Post $post)
-    // {
-    //     //delete image
-    //     Storage::delete('public/posts/'. $post->image);
-
-    //     //delete post
-    //     $post->delete();
-
-    //     //redirect to index
-    //     return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Dihapus!']);
-    // }
-
-    // public function delete($story_id)
-    // {
-    //     $story = Story::findOrFail($story_id);
-    //     $story->delete();
-    //     return redirect()->route('alumni.stories')->with(['success' => 'Story deleted!']);
-    // }
 }
 

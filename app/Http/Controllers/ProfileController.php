@@ -35,6 +35,22 @@ class ProfileController extends Controller
     public function storeProfile(Request $request)
     {
 
+        $validatedData = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'join_year' => 'required|integer|min:1900|max:' . now()->year,
+            'leave_year' => 'required|integer|min:1900|max:' . now()->year,
+            'address' => 'nullable|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'birthday' => 'nullable|date|before_or_equal:today',
+            'current_company' => 'nullable|string|max:255',
+            'current_job' => 'nullable|string|max:255',
+            'no_hp' => 'nullable|string|max:15',
+            'linkedin' => 'nullable|url|max:255',
+        ]);
+
         $user = Auth::user();
         $alumni = Alumni::where('id', Auth::user()->id)->first();
         if ($alumni) {
@@ -53,79 +69,25 @@ class ProfileController extends Controller
 
         Alumni::create([
             'id' => $user->id,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'join_year' => $request->join_year,
-            'leave_year' => $request->leave_year,
-            'address' => $request->address,
-            'city' => $request->city,
-            'country' => $request->country,
+            'first_name' => $validatedData['first_name'],
+            'last_name' => $validatedData['last_name'],
+            'join_year' => $validatedData['join_year'],
+            'leave_year' => $validatedData['leave_year'],
+            'address' => $validatedData['address'],
+            'city' => $validatedData['city'],
+            'country' => $validatedData['country'],
             'photo' => $fileName,
-            'birthday' => $request->birthday,
-            'current_company' => $request->current_company,
-            'current_job' => $request->current_job,
-            'no_hp' => $request->no_hp,
-            'linkedin' => $request->linkedin,
+            'birthday' => $validatedData['birthday'],
+            'current_company' => $validatedData['current_company'],
+            'current_job' => $validatedData['current_job'],
+            'no_hp' => $validatedData['no_hp'],
+            'linkedin' => $validatedData['linkedin'] ?? null,
             'status' => 'not verified',
         ]);
         
 
         return redirect()->route('profile.create')->with('success', 'Profile successfully saved. Please wait until we verify your data in maximum 3 days.');
-        // // Validation rules
-        // $this->validate($request, [
-        //     'first_name' => 'required|string',
-        //     'last_name' => 'required|string',
-        //     'join_year' => 'required|numeric',
-        //     'leave_year' => 'required|numeric',
-        //     'address' => 'string|max:100|nullable',
-        //     'city' => 'required|string',
-        //     'country' => 'required|string',
-        //     'photo' => 'image|mimes:jpeg,jpg,png|max:2048|nullable', // Adjust the max file size as needed
-        //     'birthday' => 'date|nullable',
-        //     'current_company' => 'string|nullable',
-        //     'current_job' => 'string|nullable',
-        //     'no_hp' => 'string|nullable',
-        //     'linkedin' => 'url|nullable',
-        // ]);
-    
-        // try {
-        //     // Handle file upload
-        //     $fileName = null;
-        //     if ($request->hasFile('photo')) {
-        //         $file = $request->file('photo');
-        //         $fileName = uniqid() . '_' . $file->getClientOriginalName();
-        //         $file->move(public_path('profilepic/'), $fileName);
-        //     }
-    
-        //     // Create or update Alumni record
-        //     $user = Auth::user();
-    
-        //     $alumni = $user->alumni ?? new Alumni;
-    
-        //     $alumni->fill([
-        //         'id' => $user->id,
-        //         'first_name' => $request->first_name,
-        //         'last_name' => $request->last_name,
-        //         'join_year' => $request->join_year,
-        //         'leave_year' => $request->leave_year,
-        //         'address' => $request->address,
-        //         'city' => $request->city,
-        //         'country' => $request->country,
-        //         'photo' => $fileName,
-        //         'birthday' => $request->birthday,
-        //         'current_company' => $request->current_company,
-        //         'current_job' => $request->current_job,
-        //         'no_hp' => $request->no_hp,
-        //         'linkedin' => $request->linkedin,
-        //         'status' => 'not verified',
-        //     ]);
-    
-        //     $alumni->save();
-    
-        //     return redirect()->route('dashboard')->with(['success', 'Profile successfully saved. It will be verified by admin within 3 working days.']);
-        // } catch (\Exception $e) {
-        //     return redirect()->route('profile.create')->with(['error', 'An error occurred. Please try again.']);
-        // }
+        
     }
     
     
@@ -146,242 +108,65 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         //dd($request->all());
-    
+
         $user = Auth::user();
         $alumni = Alumni::where('id', $user->id)->first();
-    
+
         if (!$alumni) {
             return redirect()->route('dashboard')->with('error', 'Profil alumni tidak ditemukan.');
         }
-    
+
         $validateData = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'join_year' => 'required|number',
-            'leave_year' => 'required|number',
-            'address' => 'required',
-            'city' => 'required',
-            'country' => 'required',
-            'email' => 'required|email',
-            // 'password' => 'required',
-            'photo' => 'mimes:jpeg,jpg,png',
-            //'birthday' => 'required',
-            //'current_company' => 'required',
-            //'current_job' => 'required',
-            // 'no_hp' => 'required',
-            // 'linkedin' => 'required'
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'join_year' => 'required|integer|min:1900|max:' . now()->year,
+            'leave_year' => 'required|integer|min:1900|max:' . now()->year,
+            'address' => 'nullable|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            // 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'birthday' => 'nullable|date|before_or_equal:today',
+            'current_company' => 'nullable|string|max:255',
+            'current_job' => 'nullable|string|max:255',
+            'no_hp' => 'nullable|string|max:15',
+            'linkedin' => 'nullable|url|max:255',
         ]);
-    
+
         // Update data tanpa photo
-        $alumni->update($validateData);
-    
+        $alumni->update([
+            'first_name' => $validateData['first_name'],
+            'last_name' => $validateData['last_name'],
+            'join_year' => $validateData['join_year'],
+            'leave_year' => $validateData['leave_year'],
+            'address' => $validateData['address'],
+            'city' => $validateData['city'],
+            'country' => $validateData['country'],
+            'birthday' => $validateData['birthday'],
+            'current_company' => $validateData['current_company'],
+            'current_job' => $validateData['current_job'],
+            'no_hp' => $validateData['no_hp'],
+            'linkedin' => $validateData['linkedin'] ?? null,
+        ]);
+
         if ($request->hasFile('photo')) {
             // Hapus photo lama
             if ($alumni->photo) {
-                $oldphotoPath = 'photoProfil/' . $alumni->photo;
-                if (file_exists(public_path($oldphotoPath))) {
+                $oldphotoPath = 'storage/photos/' . $alumni->photo;
+                if (file_exists($oldphotoPath)) {
                     unlink($oldphotoPath);
                 }
             } 
-        
+
             // Pindahkan dan rename file photo baru dengan timestamp
             $file = $request->file('photo');
             $fileName = uniqid() . '_' . $file->getClientOriginalName();
             
-            $$file->move(public_path('photoProfil/'), $fileName);
-            $alumni->update(['photo' => $fileName]);
+            $file->move('storage/photos/', $fileName);
+            $alumni->photo = $fileName;
         }        
-
-        if ($request->filled('password')) {
-            $password = Hash::make($request->input('password'));
-            $user = User::where('id', $alumni->id)->first();
-            $user->update(['password' => $password]);
-        }
 
         return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');
     }
-    /**
-     * Update the user's profile information.
-     */
-    // public function update(ProfileUpdateRequest $request): RedirectResponse
-    // {
-    //     $user = $request->user();
-    //     $user->fill($request->validated());
-    //     $alumni = $request->Alumni::where('id', $user->id)->first();
-    //     $alumni->fill($request->validated());
-
-    //     if ($request->user()->isDirty('email')) {
-    //         $request->user()->email_verified_at = null;
-    //     }
-
-    //     $user->save();
-    //     $alumni->save();
-
-
-    //     return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    // }
-
-    // public function update(Request $request) {
-    //     $user = $request->user();
-    //     // $alumni = Alumni::where('id', $user->id)->first();
-    //     $this->validate($request, [
-    //         'first_name' => 'required|string',
-    //         'last_name' => 'required|string',
-    //         'join_year' => 'required',
-    //         'leave_year' => 'required',
-    //         'city' => 'required',
-    //         'country' => 'required',
-    //         'email' => 'required|email|unique:users,id,' . $user->id,
-    //         // 'password' => 'required',
-    //         'photo' => 'required|mimes:jpeg,jpg,png',
-    //         'birthday' => 'required',
-    //         'current_company' => 'required',
-    //         'current_job' => 'required',
-    //         'no_hp' => 'required',
-    //         'linkedin' => 'required'
-    //     ]);
-
-    //     $user = User::with(['alumnis'])->findOrFail($user->id);
-    //     $alumni = Alumni::findOrFail($user->id);
-
-    //     if ($request->hasFile('photo')) {
-    //         $file = $request->file('photo');
-    //         $filename = time() . '.' . $file->getClientOriginalExtension();
-
-    //         $file->move('assets/images', $filename);
-
-    //         File::delete('assets/images' . $alumni->photo);
-
-    //         $user->update([
-    //             'first_name' => $request->first_name,
-    //             'last_name' => $request->last_name,
-    //             'join_year' => $request->join_year,
-    //             'leave_year' => $request->leave_year,
-    //             'city' => $request->city,
-    //             'country' => $request->country,
-    //             'email' => $request->email,
-    //             //'password' => Hash::make($request->password),
-    //             'photo' => $filename,
-    //             'birthday' => $request->birhday,
-    //             'current_company' => $request->current_company,
-    //             'current_job' => $request->current_job,
-    //             'no_hp' => $request->no_hp,
-    //             'linkedin' => $request->linkedin
-    //         ]);
-
-    //         // // Jika user mengganti passwornya password 
-
-    //         // if ($user->password != $request->password) {
-    //         //     $user->update([
-    //         //         'first_name' => $request->first_name,
-    //         //         'last_name' => $request->last_name,
-    //         //         'email' => $request->email,
-    //         //         'password' => Hash::make($request->password),
-    //         //         'image' => $filename,
-    //         //         'gender' => $request->gender,
-    //         //         'phone_number' => $request->phone_number
-    //         //     ]);
-    //         // } else {
-    //         //     // Jika user tidak mengganti passwordnya
-
-    //         //     $user->update([
-    //         //         'name' => $request->name,
-    //         //         'job_id' => $request->job_id,
-    //         //         'email' => $request->email,
-    //         //         'password' => $request->password,
-    //         //         'image' => $filename,
-    //         //         'gender' => $request->gender,
-    //         //         'phone_number' => $request->phone_number
-    //         //     ]);
-    //         // }
-    //     }
-
-    //     return redirect(route('profile.edit', $alumni->id))->with(['success' => 'profile updated!']);
-    // }
-
-    // /**
-    //  * update
-    //  *
-    //  * @param  mixed $request
-    //  * @param  mixed $alumni
-    //  * @return void
-    //  */
-    // public function update(ProfileUpdateRequest $request): RedirectResponse
-    // {
-    //     $user = $request->user();
-    //     $user->fill($request->validated());
-
-    //     if ($request->user()->isDirty('email')) {
-    //         $request->user()->email_verified_at = null;
-    //     }
-
-    //     // Update alumni profile (assuming there is a one-to-one relationship between users and alumnis)
-    //     $alumni = Alumni::where('id', $user->id)->first();
-    //     $alumni->fill($request->validated());
-
-    //     //check if image is uploaded
-    //     if ($request->hasFile('photo')) {
-
-    //         //upload new photo
-    //         $photo = $request->file('photo');
-    //         $timestamp = now()->timestamp;
-    //         $photoPath = $photo->storeAs('public/profile_photo', $timestamp . '_' . $photo->getClientOriginalName());
-
-    //         //delete old photo
-    //         Storage::delete('public/profile_photo/'.$alumni->photo);
-
-    //         // Update alumni with new photo path
-    //         $alumni->photo = $photoPath;
-
-    //     } 
-    //     $user->save();
-
-    //     $alumni->save();
-
-    //     //redirect to index
-    //     return redirect()->route('alumni.profile.edit')->with('status', 'profile-updated');
-    // }
-
-    // /**
-    //  * Update the user's profile information.
-    //  */
-    // public function update(ProfileUpdateRequest $request): RedirectResponse
-    // {
-    //     $user = $request->user();
-    //     $user->fill($request->validated());
-
-    //     // Update alumni profile (assuming there is a one-to-one relationship between users and alumnis)
-    //     $alumni = Alumni::where('id', $user->id)->first();
-    //     $alumni->fill($request->validated());
-
-    //     if ($request->user()->isDirty('email')) {
-    //         $request->user()->email_verified_at = null;
-    //     }
-
-    //     // Handle profile photo upload
-    //     if ($request->hasFile('photo')) {
-    //         // Delete old photo
-    //         if ($alumni->photo) {
-    //             $oldPhotoPath = 'public/profile_pic/' . $alumni->photo;
-    //             if (file_exists($oldPhotoPath)) {
-    //                 unlink($oldPhotoPath);
-    //             }
-    //         }
-
-    //         // Move and rename the new photo file with a timestamp
-    //         $file = $request->file('photo');
-    //         $timestamp = now()->timestamp;
-    //         $fileName = $timestamp . '_' . $file->getClientOriginalName();
-
-    //         $file->move('public/profile_pic/', $fileName);
-    //         $alumni->photo = $fileName;
-    //     }
-
-    //     $user->save();
-    //     $user->alumni()->save($alumni);
-
-    //     return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    // }
 
 
     /**

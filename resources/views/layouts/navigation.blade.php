@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.jss">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 
         :root{
             --header-height: 3rem;
@@ -49,14 +48,13 @@
             justify-content: space-between;
             padding: 0 1rem;
             background-color: var(--white-color);
-            z-index: var(--z-fixed);
             transition: .5s
-            
         }
 
         .header_toggle {
-            color: var(--first-color);
+            color: var(--white-color);
             font-size: 1.5rem;
+            padding: .3rem 0 .5rem 1.5rem;
             cursor: pointer
         }
 
@@ -70,7 +68,7 @@
         }
 
         .header_img img {
-            width: 40px
+            width: 100%
         }
 
         .l-navbar {
@@ -93,7 +91,7 @@
             overflow: hidden
         }
 
-        .nav_logo, .nav_link { 
+        .nav_logo, .nav_link {
             display: grid;
             grid-template-columns: max-content max-content;
             align-items: center;
@@ -151,8 +149,8 @@
             background-color: var(--white-color)
         }
 
-        .height-100 { 
-            height:100vh
+        .height-100 {
+            height: 100vh
         }
 
         @media screen and (min-width: 768px) {
@@ -184,7 +182,7 @@
                 width: calc(var(--nav-width) + 156px)
             }
 
-            .body-pd{
+            .body-pd {
                 padding-left: calc(var(--nav-width) + 188px)
             }
         }
@@ -198,14 +196,13 @@
             display: flex;
             flex-direction: row;
             margin-right: 1rem;
-            
         }
+
         .profile-name {
             font-family: var(--body-font);
             font-size: var(--normal-font-size);
             position: relative;
             margin-bottom: 0.5rem;
-            
         }
 
         .profile-dropdown {
@@ -214,8 +211,10 @@
         }
 
         .dropdown-content {
+            justify-content: end;
             display: none;
             position: absolute;
+            right: 0;
             background-color: #f9f9f9;
             min-width: 160px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -224,7 +223,6 @@
 
         .dropdown-content a {
             color: black;
-            /* padding: 12px 16px; */
             text-decoration: none;
             display: block;
         }
@@ -236,154 +234,141 @@
         .profile-dropdown:hover .dropdown-content {
             display: block;
         }
+
+        .nav_logo .img {
+            width: 20px;
+            height: 10px;
+        }
     </style>
 </head>
 <body id="body-pd">
-    <header class="header drop-shadow-lg " id="header">
-        <div class="header_toggle">
-            <i class='bx bx-menu' id="header-toggle"></i>
+    <header class="header drop-shadow-lg" id="header">
+        <div class="w-20">
+            <img src="/assets/img/elitery-logo.png" alt="Elitery Logo">
         </div>
-        {{-- <div class="w-20">
-            <img src="/assets/img/elitery-logo.png">
-        </div> --}}
         
         <div class="header-profile">
             <div class="group flex items-center">
-            @auth
-                @php
-                    $user = Auth::user();
-                    $alumni = $user->alumni;
-                @endphp
-                @if(!$alumni || $alumni->status == 'not verified')
-                    <div class="profile-dropdown">
-                        <button class="header_img">
-                            <img class="flex-shrink-0 object-cover aspect-square" src="/assets/profile_pic/profile.png" alt="user-profile">
-                        </button>
-
-                        <div class="dropdown-content">
-                            <div class="px-4 py-2">
-                                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                            </div>
-                            <a href="{{ route('profile.edit') }}">
-                                <div class=" pb-1 border-t border-green-200 dark:border-green-600">
-                                    <div class="mt-3 space-y-1">
-                                        <x-responsive-nav-link :href="route('profile.edit')">
-                                            {{ __('Profile') }}
-                                        </x-responsive-nav-link>
-                                    </div>
+                @auth
+                    @php
+                        $user = Auth::user();
+                        $alumni = $user->alumni;
+                    @endphp
+                    @if(!$alumni || $alumni->status == 'not verified')
+                        <div class="profile-dropdown">
+                            <button class="header_img">
+                                <img src="/assets/profile_pic/profile.png" alt="user-profile" class="flex-shrink-0 object-cover aspect-square">
+                            </button>
+                            <div class="dropdown-content">
+                                <div class="px-4 py-2">
+                                    <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                                 </div>
-                            </a>
-                            <a href="{{ route('logout') }}">
-                                <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-responsive-nav-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-responsive-nav-link>
-                                </form>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="profile-name ml-3 justify-items-center">
-                        {{ Auth::user()->name }}
-                    </div>
-                @endif
-                @if($alumni && $alumni->status == 'verified')
-                    <div class="profile-dropdown">
-                        <button class="header_img">
-                            <img src="{{asset('/storage/photos/'.$alumni->photo)}}" alt="user-profile" class="flex-shrink-0 object-cover aspect-square">
-                        </button>
-
-                        <div class="dropdown-content">
-                            <div class="px-4 py-2">
-                                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ $alumni->first_name }} {{ $alumni->last_name }}</div>
-                                <div class="font-medium text-sm text-gray-500">{{ $user->email }}</div>
-                            </div>
-                            <a href="{{ route('profile.edit') }}">
-                                <div class=" pb-1 border-t border-green-200 dark:border-green-600">
-                                    <div class="mt-3 space-y-1">
-                                        <x-responsive-nav-link :href="route('profile.edit')">
-                                            {{ __('Profile') }}
-                                        </x-responsive-nav-link>
+                                <a href="{{ route('profile.edit') }}">
+                                    <div class="pb-1 border-t border-green-200 dark:border-green-600">
+                                        <div class="mt-3 space-y-1">
+                                            <x-responsive-nav-link :href="route('profile.edit')">
+                                                {{ __('Profile') }}
+                                            </x-responsive-nav-link>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                            <a href="{{ route('logout') }}">
-                                <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-responsive-nav-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-responsive-nav-link>
-                                </form>
-                            </a>
+                                </a>
+                                <a href="{{ route('logout') }}">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                            {{ __('Log Out') }}
+                                        </x-responsive-nav-link>
+                                    </form>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="profile-name ml-3 justify-items-center">
-                        {{ $alumni->first_name }} {{ $alumni->last_name }}
-                    </div>
-                @endif
-            @endauth
+                        <div class="profile-name ml-3 justify-items-center">
+                            {{ Auth::user()->name }}
+                        </div>
+                    @endif
+                    @if($alumni && $alumni->status == 'verified')
+                        <div class="profile-dropdown">
+                            <button class="header_img">
+                                <img src="{{asset('/storage/photos/'.$alumni->photo)}}" alt="user-profile" class="flex-shrink-0 object-cover aspect-square">
+                            </button>
+                            <div class="dropdown-content">
+                                <div class="px-4 py-2">
+                                    <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ $alumni->first_name }} {{ $alumni->last_name }}</div>
+                                    <div class="font-medium text-sm text-gray-500">{{ $user->email }}</div>
+                                </div>
+                                <a href="{{ route('profile.edit') }}">
+                                    <div class="pb-1 border-t border-green-200 dark:border-green-600">
+                                        <div class="mt-3 space-y-1">
+                                            <x-responsive-nav-link :href="route('profile.edit')">
+                                                {{ __('Profile') }}
+                                            </x-responsive-nav-link>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('logout') }}">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                            {{ __('Log Out') }}
+                                        </x-responsive-nav-link>
+                                    </form>
+                                </a>
+                            </div>
+                        </div>
+                        {{-- <div class="profile-name ml-3 justify-items-center">
+                            {{ $alumni->first_name }} {{ $alumni->last_name }}
+                        </div> --}}
+                    @endif
+                @endauth
             </div>
         </div>
     </header>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
-            <div> 
-                <a href="#" class="nav_logo"> 
-                    {{-- <img src="/assets/img/elitery-logo.png"> <i class='bx bx-layer nav_logo-icon'></i>  --}}
-                    <span class="nav_logo-name">elitery</span> 
-                </a>
-                <div class="nav_list"> 
-                    <a href="{{ route('alumni.dashboard') }}" class="nav_link"> 
-                        <i class='bx bx-grid-alt nav_icon'></i> 
-                        <span class="nav_name">Dashboard</span> 
-                    </a> 
-                    <a href="{{ route('alumni.list') }}" class="nav_link"> 
-                        <i class='bx bx-group nav_icon'></i> 
-                        <span class="nav_name">Alumni List</span> 
-                    </a> 
-                    <a href="{{ route('alumni.stories') }}" class="nav_link"> 
-                        <i class='bx bx-message-square-detail nav_icon'></i> 
-                        <span class="nav_name">Stories</span> 
-                    </a> 
-                    <a href="{{ route('alumni.edit', Auth::user()->id) }}" class="nav_link"> 
-                        <i class='bx bx-user nav_icon'></i> 
-                        <span class="nav_name">Edit Profile</span> 
-                    </a> 
-                    {{-- <a href="#" class="nav_link"> 
-                        <i class='bx bx-folder nav_icon'></i> 
-                        <span class="nav_name">Files</span> 
-                    </a> 
-                    <a href="#" class="nav_link"> 
-                        <i class='bx bx-bar-chart-alt-2 nav_icon'></i> 
-                        <span class="nav_name">Stats</span> 
-                    </a>  --}}
+            <div>
+                <div class="nav_list">
+                    <div class="header_toggle mb-4">
+                        <i class='bx bx-menu' id="header-toggle"></i>
+                    </div>
+                    <a href="{{ route('alumni.dashboard') }}" class="nav_link">
+                        <i class='bx bx-grid-alt nav_icon'></i>
+                        <span class="nav_name">Homepage</span>
+                    </a>
+                    <a href="{{ route('alumni.list') }}" class="nav_link">
+                        <i class='bx bx-group nav_icon'></i>
+                        <span class="nav_name">Alumni List</span>
+                    </a>
+                    <a href="{{ route('alumni.stories') }}" class="nav_link">
+                        <i class='bx bx-message-square-detail nav_icon'></i>
+                        <span class="nav_name">Stories</span>
+                    </a>
+                    <a href="{{ route('referral.create') }}" class="nav_link">
+                        <i class='bx bx-gift nav_icon'></i>
+                        <span class="nav_name">Referrals</span>
+                    </a>
+                    <a href="{{ route('alumni.edit', Auth::user()->id) }}" class="nav_link">
+                        <i class='bx bx-user nav_icon'></i>
+                        <span class="nav_name">Edit Profile</span>
+                    </a>
                 </div>
-            </div> 
+            </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-
-                <a href="{{ route('logout') }}" method="POST" action="{{ route('logout') }}" class="nav_link" onclick="event.preventDefault();
-                this.closest('form').submit();"> 
-                    <i class='bx bx-log-out nav_icon'></i> 
-                    <span class="nav_name">Log Out</span> 
+                <a href="{{ route('logout') }}" class="nav_link" onclick="event.preventDefault(); this.closest('form').submit();">
+                    <i class='bx bx-log-out nav_icon'></i>
+                    <span class="nav_name">Log Out</span>
                 </a>
             </form>
         </nav>
     </div>
     <!--Container Main start-->
-    <div class="height-flex mb-5 mt-10 mr-3 bg-light">
+    <div class="">
         @yield('content')
     </div>
-    <!--Container Main end-->
 
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
-
             const showNavbar = (toggleId, navId, bodyId, headerId) => {
                 const toggle = document.getElementById(toggleId),
                     nav = document.getElementById(navId),

@@ -44,18 +44,58 @@ class AlumniController extends Controller
 
     public function search(Request $request)
     {
-        $search = $request->search;
+        $query = Alumni::query();
 
-        $alumni = Alumni::where('first_name', 'like', "%{$search}%")
-            ->orWhere('last_name', 'like', "%{$search}%")
-            ->orWhere('current_job', 'like', "%{$search}%")
-            ->orWhere('current_company', 'like', "%{$search}%")
-            ->orWhere('city', 'like', "%{$search}%")
-            ->orWhere('country', 'like', "%{$search}%")
-            ->paginate();
+        $category = $request->input('category');
+        $search = $request->input('search');
 
-        return view('alumni.alumni-list', ['alumni' => $alumni]);
+        if ($category && $search) {
+            switch ($category) {
+                case 'name':
+                    $query->where('first_name', 'like', "%{$search}%")
+                          ->orWhere('last_name', 'like', "%{$search}%");
+                    break;
+                case 'join_year':
+                    $query->where('join_year', $search);
+                    break;
+                case 'leave_year':
+                    $query->where('leave_year', $search);
+                    break;
+                case 'city':
+                    $query->where('city', $search);
+                    break;
+                case 'country':
+                    $query->where('country', $search);
+                    break;
+                case 'current_job':
+                    $query->where('current_job', $search);
+                    break;
+                case 'current_company':
+                    $query->where('current_company', $search);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        $alumniStatus = $query->where('status', 'verified')->get();
+
+        return view('alumni.alumni-list', compact('alumniStatus'));
     }
+    // public function search(Request $request)
+    // {
+    //     $search = $request->search;
+
+    //     $alumni = Alumni::where('first_name', 'like', "%{$search}%")
+    //         ->orWhere('last_name', 'like', "%{$search}%")
+    //         ->orWhere('current_job', 'like', "%{$search}%")
+    //         ->orWhere('current_company', 'like', "%{$search}%")
+    //         ->orWhere('city', 'like', "%{$search}%")
+    //         ->orWhere('country', 'like', "%{$search}%")
+    //         ->paginate();
+
+    //     return view('alumni.alumni-list', ['alumni' => $alumni]);
+    // }
     public function viewAlumniDetails($id)
     {
         // Retrieve alumni and user data based on user_id
